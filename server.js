@@ -29,6 +29,7 @@ app.use(
 // Models
 const Student = require("./models/Student")
 const User = require("./models/User")
+const Course = require("./models/Course")
 
 // Authentication middleware
 const isAuthenticated = (req, res, next) => {
@@ -43,6 +44,7 @@ app.use("/api/students", require("./routes/students"))
 app.use("/api/users", require("./routes/users"))
 app.use("/api/courses", require("./routes/courses"))
 app.use("/api/grades", require("./routes/grades"))
+app.use("/student", require("./routes/student"))
 
 // Authentication routes
 app.get("/register", (req, res) => {
@@ -207,6 +209,18 @@ app.get("/", (req, res) => {
 // Profile route
 app.get("/profile", isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "profile.html"))
+})
+
+// Student routes
+app.get("/student/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "student-login.html"))
+})
+
+app.get("/student/dashboard", (req, res) => {
+  if (!req.session.studentId) {
+    return res.redirect("/student/login")
+  }
+  res.sendFile(path.join(__dirname, "public", "student-dashboard.html"))
 })
 
 // Start server
