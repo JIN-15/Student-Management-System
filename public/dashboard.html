@@ -233,7 +233,7 @@
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
-              <tr>
+                <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roll No</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
@@ -244,8 +244,8 @@
               <!-- Students will be loaded here -->
               </tbody>
             </table>
+            </div>
           </div>
-      </div>
       </div>
     </main>
   
@@ -261,11 +261,22 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Roll Number</label>
-            <input type="number" name="rollNo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <input type="text" name="rollNo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Department</label>
-            <input type="text" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <select name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+              <option value="">Select Department</option>
+              <option value="CS">Computer Science</option>
+              <option value="EE">Electrical Engineering</option>
+              <option value="BBA">Business Administration</option>
+              <option value="SE">Software Engineering</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <input type="password" name="password" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+            <p class="mt-1 text-sm text-gray-500">This will be the student's login password</p>
           </div>
           <div class="flex justify-end space-x-3">
             <button type="button" onclick="hideAddStudentModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
@@ -323,8 +334,9 @@
       const formData = new FormData(e.target);
       const studentData = {
         name: formData.get('name'),
-        rollNo: parseInt(formData.get('rollNo')),
-        department: formData.get('department')
+        rollNo: formData.get('rollNo'),
+        department: formData.get('department'),
+        password: formData.get('password')
       };
 
       try {
@@ -337,9 +349,11 @@
         });
 
         if (response.ok) {
+          const result = await response.json();
           hideAddStudentModal();
           loadStudents();
           e.target.reset();
+          alert('Student added successfully! Please provide these credentials to the student:\nRoll Number: ' + result.rollNo + '\nPassword: ' + formData.get('password'));
         } else {
           const error = await response.json();
           alert(error.message || 'Error adding student');

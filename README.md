@@ -67,6 +67,55 @@ npm start
 
 The application will be available at `http://localhost:3000`
 
+## Login Instructions
+
+### Admin/Staff Login
+1. Navigate to `http://localhost:3000/login`
+2. Use the following credentials:
+   - Username: `admin`
+   - Password: `admin123`
+
+### Student Login
+1. Navigate to `http://localhost:3000/student/login`
+2. Use your credentials:
+   - Roll Number: Your assigned roll number
+   - Password: The password set during your account creation
+
+Note: 
+- For admin accounts: Use the registration page at `http://localhost:3000/register`
+- For student accounts: They must be created by an administrator through the admin dashboard
+- When creating a student account, the admin must provide:
+  - Student's full name
+  - Roll number
+  - Department
+  - Password (this will be the student's login password)
+
+## Student Portal Features
+
+1. Student Information Display
+   - Full name
+   - Roll number
+   - Department
+   - Email address
+
+2. Course Management
+   - View registered courses
+   - Register for new courses
+   - Drop courses
+   - Search available courses
+   - View course details (credits, instructor, description)
+
+3. Account Management
+   - Change password
+   - Logout functionality
+
+4. Course Registration
+   - View available courses in student's department
+   - Search courses by name or code
+   - View detailed course information
+   - Register for courses with one click
+   - Drop courses with confirmation
+
 ## Project Structure
 
 ```

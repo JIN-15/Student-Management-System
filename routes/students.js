@@ -2,13 +2,21 @@ const express = require("express")
 const router = express.Router()
 const Student = require("../models/Student")
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 // Question 1: Basic CRUD operations
 
 // POST /students - Add a student
 router.post("/", async (req, res) => {
   try {
-    const { name, rollNo, department } = req.body
+    const { name, rollNo, department, password } = req.body
+
+    // Validate required fields
+    if (!name || !rollNo || !department || !password) {
+      return res.status(400).json({ 
+        message: "All fields are required: name, rollNo, department, and password" 
+      })
+    }
 
     // Check if student with rollNo already exists
     const existingStudent = await Student.findOne({ rollNo })
@@ -16,14 +24,25 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Student with this Roll No already exists" })
     }
 
+    // Hash the password
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const student = new Student({
       name,
       rollNo,
       department,
+      password: hashedPassword,
+      email: `${rollNo.toLowerCase()}@student.edu` // Generate default email
     })
 
     const savedStudent = await student.save()
-    res.status(201).json(savedStudent)
+    
+    // Return student info without password
+    const studentResponse = savedStudent.toObject()
+    delete studentResponse.password
+    
+    res.status(201).json(studentResponse)
   } catch (err) {
     console.error(err)
     res.status(500).json({ message: "Server error" })
